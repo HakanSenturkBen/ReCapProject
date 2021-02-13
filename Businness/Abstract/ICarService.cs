@@ -1,12 +1,12 @@
 ﻿using Entities.Concrete;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Businness
 {
     public interface ICarService
     {
         List<Car> GetAll();
+        List<Car> GetAllByBrandsOrColor(int ID);
+        List<Car> GetAllByDailyPrice(int min, int max);
     }
 }
