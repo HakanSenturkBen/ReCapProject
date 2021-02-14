@@ -10,14 +10,18 @@ namespace ReCapProject
     {
         static void Main(string[] args)
         {
+            CarTest();
+        }
+
+        private static void CarTest()
+        {
             CarManager carManager = new CarManager(new EFCarDal());
 
-            foreach (var cars in carManager.GetAll())
+            foreach (var cars in carManager.GetCarDetails())
             {
-                Console.WriteLine(cars.CarName+" "+cars.Description);
+                Console.WriteLine("{ 0,15} { 1,-15 }", cars.CarName,cars.BrandName);
             }
         }
 
-        
     }
 }
