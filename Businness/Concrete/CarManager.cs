@@ -1,4 +1,6 @@
-﻿using DataAccess.Abstract;
+﻿using Businness.Constant;
+using Core.Utilities.Result;
+using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
 using System;
@@ -14,24 +16,45 @@ namespace Businness.Concrete
         {
             _carDal = carDal;
         }
-        public List<Car> GetAll()
+
+        public IResult Add(Car car)
         {
-            return _carDal.GetAll();
+            if (car.CarName.Length<2)
+            {
+                return new ErrorResult(Messages.InvalidName);
+            }
+            _carDal.Add(car);
+            return new SuccessResult(Messages.Added);
         }
 
-        public List<Car> GetAllByBrandsOrColor(int ID)
+        public IDataResult<List<Car>> GetAll()
         {
-           return _carDal.GetAll(p=>p.ColorID==ID);
+            if (DateTime.Now.Hour==22)
+            {
+                return new ErrorDataResult<List<Car>>(_carDal.GetAll(), Messages.MaintenanceTime);
+            }
+            return new ErrorDataResult<List<Car>>(_carDal.GetAll(), Messages.Listed);
         }
 
-        public List<Car> GetAllByDailyPrice(decimal min, decimal max)
+        public IDataResult<List<Car>> GetAllByBrandsOrColor(int ID)
         {
-            return _carDal.GetAll(p => p.DailyPrice >= min && p.DailyPrice<=max);
+           return new SuccessDataResult<List<Car>>(_carDal.GetAll(p=>p.ColorID==ID));
         }
 
-        public List<CarDetailDto> GetCarDetails()
+        public IDataResult<List<Car>> GetAllByDailyPrice(decimal min, decimal max)
         {
-            return _carDal.GetCarDetails();
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(p => p.DailyPrice >= min && p.DailyPrice<=max));
         }
+
+        public IDataResult<Car> GetById(int carID)
+        {
+            return new SuccessDataResult<Car>(_carDal.Get(c => c.CarID == carID));
+        }
+
+        public IDataResult<List<CarDetailDto>> GetCarDetails()
+        {
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails());
+        }
+       
     }
 }

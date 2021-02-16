@@ -16,11 +16,15 @@ namespace ReCapProject
         private static void CarTest()
         {
             CarManager carManager = new CarManager(new EFCarDal());
-
-            foreach (var cars in carManager.GetCarDetails())
+            var result = carManager.GetCarDetails();
+            if (result.Success)
             {
-                Console.WriteLine("{ 0,15} { 1,-15 }", cars.CarName,cars.BrandName);
+                foreach (var cars in result.Data)
+                {
+                    Console.WriteLine("{0,20} {1,-20}", cars.BrandName, cars.CarName);
+                }
             }
+            
         }
 
     }
